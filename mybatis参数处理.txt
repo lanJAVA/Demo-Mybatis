@@ -1,0 +1,104 @@
+单个参数： mybatis不做特殊处理
+	#{参数名}：取得参数值
+
+多个参数：
+	多个参数会被封装成一个map，
+		key: param1...paramN,或者参数的索引也可以
+		value: 传入的参数值
+	#{}就是从map中获取指定key的value值
+	
+	异常：
+		org.apache.ibatis.binding.BindingException: Parameter 'id' not found. 
+		Available parameters are [arg1, arg0, param1, param2]
+	操作：
+		方法：public Employee getEmpByIdAndLastName(Integer id, String lastName);
+		取值：#{id},#{lastName}
+
+命名参数：明确指定封装参数时map的key：@Param("id")
+	多个参数会被封装成一个map，
+		key:使用@Param注解指定的值
+		value:参数值
+	#{指定的key}取出对应的参数值
+
+POJO：
+如果多个参数正好是业务逻辑的数据模型，就可以之间传入POJO
+	#{属性名}：取出传入的POJO的属性值
+
+Map：
+如果多个参数不是业务模型中的数据，没有对应的POJO，可以直接传入map
+	#{key}:取出map中对应的值
+
+TO：
+如果多个参数不是业务模型中的数据，但是要经常使用，推荐来编写一个TO(Transfer Object)数据传输对象
+比如：分页
+Page {
+	int index;
+	int size;
+}
+
+
+=============================================思考=================================================
+public Employee getEmp(@Param("id") Integer id, String lastName);
+	取值：id ==> #{id/param1}   lastName ==> #{param2}
+
+public Employee getEmp(Integer id, @Param("emp") Employee emp);
+	取值： id ==> #{param1}    lastName ==> #{param2.lastName/emp.lastName}
+	
+###特别注意：如果是Collection（List,Set）类型或者是数组，也会特殊处理，把传入的list或者数组封装在map中
+	key:Collection(collection)
+	如果是List,key:list
+	如果是数组,key:array
+public Employee getEmp(List<Integer> ids);
+	取值：取出第一个id的值：   #{list[0]}
+
+===================================结合源码，看mybatis如何处理参数========================================
+总结：参数多时会封装map，为了不混乱，使用@Param来指定封装时使用的key
+#{key}就可以取出map中的值
+
+(@Param("id") Integer id, @Param("lastName") String lastName);
+ParamNameResolver解析参数封装map：
+//1. names: {0=id, 1=lastName}
+	1. 获取每个标了param注解@Param的参数的值：id，lastName；赋值给name；
+	2. 每次解析一个参数给map中保持信息：（key:参数索引，value:name的值）
+		标注了@Param注解：注解的值
+		没有标注：
+			1. 全局配置：useActualParamName(jdk1.8):name=参数名
+			2. name=map.size()
+
+  public Object getNamedParams(Object[] args) {   //args [1,"jerry"]
+    final int paramCount = names.size();
+    
+    //如果没有参数传递，返回null
+    if (args == null || paramCount == 0) {
+      return null;
+      
+     //如果只传了一个参数，并且没有@Param注解 ,返回的args[0]
+    } else if (!hasParamAnnotation && paramCount == 1) { 
+      return args[names.firstKey()];  
+    } else {
+      final Map<String, Object> param = new ParamMap<Object>();
+      int i = 0;
+      
+      //有多个参数或者有@Param注解，遍历names集合
+      for (Map.Entry<Integer, String> entry : names.entrySet()) {
+      
+      	//以names.value作为param的key，以参数args[names.key]作为param的value
+        param.put(entry.getValue(), args[entry.getKey()]);
+        // add generic param names (param1, param2, ...)
+        final String genericParamName = GENERIC_NAME_PREFIX + String.valueOf(i + 1);
+        // ensure not to overwrite parameter named with @Param
+        //将每个参数再以param1...paramN的形式保存一边
+        if (!names.containsValue(genericParamName)) {
+          param.put(genericParamName, args[entry.getKey()]);
+        }
+        i++;
+      }
+      return param;
+    }
+  }
+
+
+================================================================
+
+
+

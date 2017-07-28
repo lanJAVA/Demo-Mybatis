@@ -2,6 +2,8 @@ package com.lans.mybatis.test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -56,8 +58,9 @@ public class MyBatisTest {
 			EmployeeMapper mapper = session.getMapper(EmployeeMapper.class);
 			
 //			≤‚ ‘ÃÌº”
-//			Employee voAdd = new Employee(null, "jerry", "jerry@163.com", "0");
-//			mapper.addEmp(voAdd);
+			Employee voAdd = new Employee(null, "jerry", "jerry@163.com", "0");
+			mapper.addEmp(voAdd);
+			System.out.println(voAdd);
 			
 //			≤‚ ‘–ﬁ∏ƒ
 //			Employee voUpdate = new Employee(1, "Tom", "Tom@163.com", "1");
@@ -71,4 +74,21 @@ public class MyBatisTest {
 			session.close();
 		}
 	}
+	@Test
+	public void test04() throws IOException {
+		SqlSessionFactory factory = getSqlSessionFactory();
+		SqlSession session = factory.openSession();
+		try {
+			EmployeeMapper mapper = session.getMapper(EmployeeMapper.class);
+//			Employee employee = mapper.getEmpByIdAndLastName(3, "jerry");
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("id", 3);
+			map.put("lastName", "jerry");
+			Employee employee = mapper.getEmpByMap(map);
+			System.out.println(employee); 
+		} finally {
+			session.close();
+		}
+	}
+	
 }
