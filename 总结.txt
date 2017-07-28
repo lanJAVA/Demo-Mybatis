@@ -1,0 +1,39 @@
+mybatis基础总结：
+	1. 取得SqlSessionFactory对象:
+		Resources.getResourceAsStream()读取全局配置文件(mybatis-config.xml)，得到InputStream，
+		new SqlSessionFactoryBuilder().builder(inputstream)，得到factory
+		（SqlSession和Connection一样是非线程安全的，所以每次调用要重新获得对象，不能放在共享区）
+	2. 取得SqlSession，factory.openSession(),SqlSession可以执行CRUD（selectOne,selectList,...)
+	3. 接口式编程：SqlSession取得接口对象（代理），调用getMapper()方法，接口再调用自己的方法
+	4. 接口要和xml映射文件做好对于，namespace和sql语句的id要和接口名和接口方法名对应
+	
+xml文件引入dtd约束：
+	"http://mybatis.org/dtd/mybatis-3-config.dtd"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+将mybatis的jar包里的mybatis-3.4.4.jar\org\apache\ibatis\builder\xml\文件夹下的dtd约束文件配置到eclipse中
+
+全局配置文件：mybatis-config.xml
+properties： 引入资源文件，如database.properties；resource读取类路径下的资源文件，url读取指定路径下的资源文件
+	为占位符指定默认值，默认关闭，开启则要在properties中设置enable-default-value属性为true：
+	<property name="org.apache.ibatis.parsing.PropertyParser.enable-default-value" value="true"/>
+	使用:作为分隔键（${db.username:root}），也可以更改分隔键:
+	<property name="org.apache.ibatis.parsing.PropertyParser.default-value-separator" value="?:"/>
+settings:
+	mapUnderscoreToCamelCase,默认为false
+typeAliases:
+	typeAlias，package，@Alias()：
+		package和typeAlias可同时生效，
+		typeAlias和@Alias()都存在则typeAlias生效，
+		package和@Alias()则@Alias()生效
+	MyBatis内置的对Java常见类型起了别名（不区分大小写）
+	 
+Configuration全局配置的标签：
+	properties, settings, typeAliases, typeHandlers, objectFactory, 
+	plugins, environment, databaseIdProvider, mappers
+	
+	 
+	 
+	 
+	 
+	 
+	  
