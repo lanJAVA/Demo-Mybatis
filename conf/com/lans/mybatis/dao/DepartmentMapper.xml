@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lans.mybatis.dao.DepartmentMapper">
+	
+	<select id="getDeptById" resultType="dept">
+		SELECT id,dept_name departmentName FROM dept WHERE id=#{id}
+	</select>
+	<select id="getDeptByIdPlus" resultMap="mydept">
+		SELECT d.id did,d.dept_name,e.id eid,e.last_name,e.email,e.gender
+		FROM dept d LEFT OUTER JOIN employee e ON d.id=e.dept_id WHERE d.id=#{id}
+	</select>
+	<resultMap id="mydept" type="dept">
+		<id property="id" column="did"/>
+		<result property="departmentName" column="dept_name"/>
+		<collection property="emps" ofType="employee">
+			<id property="id" column="eid"/>
+			<result property="lastName" column="last_name"/>
+			<result property="email" column="email"/>
+			<result property="gender" column="gender"/>
+		</collection>
+	</resultMap>
+	<select id="getDeptByIdStep" resultMap="mydept2">
+		SELECT id,dept_name FROM dept WHERE id=#{id}
+	</select>
+	<resultMap type="dept" id="mydept2">
+		<id property="id" column="id"/>
+		<result property="departmentName" column="dept_name"/>
+		<collection property="emps" javaType="ArrayList" column="id" ofType="employee"
+			select="com.lans.mybatis.dao.EmployeeMapperPlus.getEmpsByDept"/>
+	</resultMap>
+</mapper>

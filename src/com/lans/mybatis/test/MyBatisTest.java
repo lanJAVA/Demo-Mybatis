@@ -11,8 +11,11 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Test;
 
+import com.lans.mybatis.bean.Department;
 import com.lans.mybatis.bean.Employee;
+import com.lans.mybatis.dao.DepartmentMapper;
 import com.lans.mybatis.dao.EmployeeMapper;
+import com.lans.mybatis.dao.EmployeeMapperPlus;
 
 public class MyBatisTest {
 	
@@ -91,4 +94,64 @@ public class MyBatisTest {
 		}
 	}
 	
+	@Test
+	public void test05() throws IOException {
+		SqlSessionFactory factory = getSqlSessionFactory();
+		SqlSession session = factory.openSession();
+		try {
+			EmployeeMapper mapper = session.getMapper(EmployeeMapper.class);
+//			List<Employee> emps = mapper.getEmpsByLastNameLike("%e%");
+//			for (Employee e: emps) 		System.out.println(e);
+			
+//			Map<String,Object> map = mapper.getEmpByIdReturnMap(2);
+//			System.out.println(map);
+			
+			Map<Integer, Employee> map1 = mapper.getEmpsByLastNameLikeReturnMap("%r%");
+			System.out.println(map1);
+		} finally {
+			session.close();
+		}
+	}
+	
+	@Test
+	public void test06() throws IOException {
+		SqlSessionFactory factory = getSqlSessionFactory();
+		SqlSession session = factory.openSession();
+		try {
+			EmployeeMapperPlus mapper = session.getMapper(EmployeeMapperPlus.class);
+//			Employee emp = mapper.getEmpById(5);
+//			System.out.println(emp);
+			
+//			Employee emp1 = mapper.getEmpAndDept(5);
+//			System.out.println(emp1);
+//			System.out.println(emp1.getDept());
+			
+			Employee emp2 = mapper.getEmpByIdStep(5);
+//			System.out.println(emp2);
+//			System.out.println(emp2.getDept());
+			System.out.println(emp2.getEmail());
+			System.out.println(emp2.getDept().getDepartmentName());
+		} finally {
+			session.close();
+		}
+	}
+	
+	
+	@Test
+	public void test07() throws IOException {
+		SqlSessionFactory factory = getSqlSessionFactory();
+		SqlSession session = factory.openSession();
+		try {
+			DepartmentMapper mapper = session.getMapper(DepartmentMapper.class);
+//			Department dept = mapper.getDeptByIdPlus(1);
+//			System.out.println(dept);
+//			System.out.println(dept.getEmps());
+			Department dept1 = mapper.getDeptByIdStep(1);
+//			System.out.println(dept1);
+//			System.out.println(dept1.getEmps());
+			System.out.println(dept1.getDepartmentName());
+		} finally {
+			session.close();
+		}
+	}
 }
