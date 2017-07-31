@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties resource="database.properties">
+		<property name="org.apache.ibatis.parsing.PropertyParser.enable-default-value" value="true"/>
+	</properties>
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+		<setting name="lazyLoadingEnabled" value="true"/>
+		<setting name="aggressiveLazyLoading" value="false"/>
+	</settings>
+	<typeAliases>
+		<!-- <typeAlias type="com.lans.mybatis.bean.Employee" alias="emp"/> -->
+		<package name="com.lans.mybatis.bean"/>
+	</typeAliases>
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${db.driver}" />
+				<property name="url" value="${db.url}" />
+				<property name="username" value="${db.username:root}" />
+				<property name="password" value="${db.password:mysqladmin}" />
+			</dataSource>
+		</environment>
+		<environment id="oracle">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${orcl.driver}"/>
+				<property name="url" value="${orcl.url}"/>
+				<property name="username" value="${orcl.username}"/>
+				<property name="password" value="${orcl.password}"/>
+			</dataSource>
+		</environment>
+	</environments>
+	<databaseIdProvider type="DB_VENDOR">
+		<property name="MySQL" value="mysql"/>
+		<property name="Oracle" value="oracle"/>
+		<property name="SQL Server" value="sqlserver"/>
+	</databaseIdProvider>
+	<mappers>
+		<!-- <mapper resource="EmployeeMapper.xml" /> -->
+		<package name="com.lans.mybatis.dao"/>
+	</mappers>
+</configuration>

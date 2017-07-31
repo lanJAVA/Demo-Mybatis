@@ -10,6 +10,14 @@ public class Department {
 	private String departmentName;
 	private List<Employee> emps;
 	
+	public Department() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public Department(Integer id) {
+		super();
+		this.id = id;
+	}
 	public List<Employee> getEmps() {
 		return emps;
 	}

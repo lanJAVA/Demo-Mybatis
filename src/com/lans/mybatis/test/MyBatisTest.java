@@ -2,7 +2,10 @@ package com.lans.mybatis.test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.io.Resources;
@@ -15,6 +18,7 @@ import com.lans.mybatis.bean.Department;
 import com.lans.mybatis.bean.Employee;
 import com.lans.mybatis.dao.DepartmentMapper;
 import com.lans.mybatis.dao.EmployeeMapper;
+import com.lans.mybatis.dao.EmployeeMapperDynamicSQL;
 import com.lans.mybatis.dao.EmployeeMapperPlus;
 
 public class MyBatisTest {
@@ -151,6 +155,45 @@ public class MyBatisTest {
 //			System.out.println(dept1.getEmps());
 			System.out.println(dept1.getDepartmentName());
 		} finally {
+			session.close();
+		}
+	}
+	
+	@Test
+	public void test08() throws IOException {
+		SqlSessionFactory factory = getSqlSessionFactory();
+		SqlSession session = factory.openSession();
+		try {
+			EmployeeMapperDynamicSQL mapper = session.getMapper(EmployeeMapperDynamicSQL.class);
+			Employee emp = new Employee(3,"tom","tom@163.com",null);
+//			List<Employee> emps = mapper.getEmpsByConditionIf(emp);
+//			List<Employee> emps = mapper.getEmpsByConditionTrim(emp);
+//			List<Employee> emps = mapper.getEmpsByConditionChoose(emp);
+//			for (Employee e : emps) System.out.println(e);
+//			mapper.updateEmp(emp);
+//			session.commit();
+			
+			List<Employee> emps = mapper.getEmpsByConditionForeach(Arrays.asList(1,2,3,4,5));
+			for (Employee e : emps) System.out.println(e);
+		} finally {
+			session.close();
+		}
+	}
+	
+	@Test
+	public void test09() throws IOException {
+		SqlSessionFactory factory = getSqlSessionFactory();
+		SqlSession session = factory.openSession();
+		try {
+			EmployeeMapperDynamicSQL mapper = session.getMapper(EmployeeMapperDynamicSQL.class);
+			List<Employee> emps = new ArrayList<Employee>();
+			Employee emp = new Employee(null,"tom","tom@163.com","1",new Department(1));
+			Employee emp1 = new Employee(null,"adu","adu@163.com","1",new Department(2));
+			emps.add(emp);
+			emps.add(emp1);
+			mapper.addEmps(emps);
+			session.commit();
+		}finally {
 			session.close();
 		}
 	}
