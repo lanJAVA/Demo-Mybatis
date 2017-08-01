@@ -1,11 +1,13 @@
 package com.lans.mybatis.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.ibatis.type.Alias;
 
+@SuppressWarnings("serial")
 @Alias("dept")
-public class Department {
+public class Department implements Serializable{
 	private Integer id;
 	private String departmentName;
 	private List<Employee> emps;

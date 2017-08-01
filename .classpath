@@ -7,5 +7,9 @@
 	<classpathentry kind="lib" path="F:/MyBatis/mybatis-3.4.4/lib/log4j-1.2.17.jar"/>
 	<classpathentry kind="lib" path="F:/MyBatis/课件&amp;代码/Jar包/LibrarySupport/mysql-connector-java-5.1.37-bin.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="F:/MyBatis/课件&amp;代码/Jar包/LibrarySupport/ehcache-core-2.6.8.jar"/>
+	<classpathentry kind="lib" path="F:/MyBatis/课件&amp;代码/Jar包/LibrarySupport/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="F:/MyBatis/课件&amp;代码/Jar包/LibrarySupport/slf4j-log4j12-1.6.2.jar"/>
+	<classpathentry kind="lib" path="F:/MyBatis/课件&amp;代码/Jar包/LibrarySupport/mybatis-ehcache-1.0.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

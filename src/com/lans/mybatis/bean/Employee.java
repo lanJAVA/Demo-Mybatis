@@ -1,6 +1,9 @@
 package com.lans.mybatis.bean;
 
-public class Employee {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class Employee implements Serializable{
 	private Integer id ;
 	private String lastName ;
 	private String email;
