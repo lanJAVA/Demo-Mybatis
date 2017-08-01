@@ -58,4 +58,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			(#{emp.lastName},#{emp.email},#{emp.gender},#{emp.dept.id})
 		</foreach>
 	</insert>
+	
+	<insert id="addEmps2">
+		INSERT INTO employee(
+			<include refid="insertColumn"></include>
+		)	VALUES 
+		<foreach collection="emps" item="emp" separator=",">
+			(#{emp.lastName},#{emp.email},#{emp.gender},#{emp.dept.id})
+		</foreach>
+	</insert>
+	<sql id="insertColumn">
+		last_name,email,gender,dept_id
+	</sql>
 </mapper>
