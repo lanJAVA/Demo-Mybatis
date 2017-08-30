@@ -1,16 +1,19 @@
 package com.lans.mybatis.test;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Test;
-
-import com.lans.mybatis.bean.Employee;
-import com.lans.mybatis.dao.EmployeeMapper;
+import org.mybatis.generator.api.MyBatisGenerator;
+import org.mybatis.generator.config.Configuration;
+import org.mybatis.generator.config.xml.ConfigurationParser;
+import org.mybatis.generator.internal.DefaultShellCallback;
 
 public class MyBatisTest {
 	
@@ -20,43 +23,19 @@ public class MyBatisTest {
 		SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(inputStream);
 		return factory ;
 	}
-	
 	@Test
-	public void testFirstLevelCache() throws IOException {
-		SqlSessionFactory factory = getSqlSessionFactory();
-		SqlSession session = factory.openSession();
-		try {
-			EmployeeMapper mapper = session.getMapper(EmployeeMapper.class);
-			Employee emp = mapper.getEmpById(2);
-			System.out.println(emp);
-			Employee emp1 = mapper.getEmpById(1);
-			System.out.println(emp1);
-			Employee emp2 = mapper.getEmpById(2);
-			System.out.println(emp2);
-		} finally {
-			session.close();
-		}
+	public void testMbg() throws Exception {
+	   List<String> warnings = new ArrayList<String>();
+	   boolean overwrite = true;
+	   File configFile = new File("mbg.xml");
+	   ConfigurationParser cp = new ConfigurationParser(warnings);
+	   Configuration config = cp.parseConfiguration(configFile);
+	   DefaultShellCallback callback = new DefaultShellCallback(overwrite);
+	   MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
+	   myBatisGenerator.generate(null);
 	}
 	
-	@Test
-	public void testSecondLevelCache() throws IOException {
-		SqlSessionFactory factory = getSqlSessionFactory();
-		SqlSession session = factory.openSession();
-		SqlSession session2 = factory.openSession();
-		try {
-			EmployeeMapper mapper = session.getMapper(EmployeeMapper.class);
-			EmployeeMapper mapper2 = session2.getMapper(EmployeeMapper.class);
-			
-			Employee emp = mapper.getEmpById(2);
-			System.out.println(emp);
-			session.close();
-			
-			Employee emp2 = mapper2.getEmpById(2);
-			System.out.println(emp2);
-			session2.close();
-		} finally {
-		}
-	}
+	
 	
 
 }

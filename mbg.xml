@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+	<!-- <classPathEntry location="/Program Files/IBM/SQLLIB/java/db2java.zip" /> -->
+
+	<context id="DB2Tables" targetRuntime="MyBatis3">
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" /><!-- 取消注释 -->
+		</commentGenerator>
+		
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://10.253.1.18:3306/testdb" 
+			userId="root" 
+			password="shuduo#3306">
+		</jdbcConnection>
+
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<javaModelGenerator targetPackage="com.lans.mybatis.bean"
+			targetProject=".\src">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="com.lans.mybatis.dao"
+			targetProject=".\conf">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.lans.mybatis.dao" 
+			targetProject=".\src">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+
+		<table tableName="t_month" domainObjectName="Month"
+			enableSelectByExample="true" enableInsert="true"
+			enableUpdateByPrimaryKey="true" enableCountByExample="true"
+			enableUpdateByExample="true" enableSelectByPrimaryKey="true">
+			<property name="useActualColumnNames" value="false" />
+		</table>
+		<table tableName="t_day" domainObjectName="Day">
+		</table>
+
+	</context>
+</generatorConfiguration>

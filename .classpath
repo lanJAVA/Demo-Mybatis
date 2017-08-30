@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="F:/MyBatis/课件&amp;代码/Jar包/LibrarySupport/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="lib" path="F:/MyBatis/课件&amp;代码/Jar包/LibrarySupport/slf4j-log4j12-1.6.2.jar"/>
 	<classpathentry kind="lib" path="F:/MyBatis/课件&amp;代码/Jar包/LibrarySupport/mybatis-ehcache-1.0.3.jar"/>
+	<classpathentry kind="lib" path="F:/MyBatis/mybatis-generator-core-1.3.5/lib/mybatis-generator-core-1.3.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
